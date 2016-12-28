@@ -8,7 +8,11 @@ GEM
   remote: https://rubygems.org/
   specs:
     byebug (9.0.6)
+    codeclimate-test-reporter (1.0.3)
+      simplecov
     diff-lcs (1.2.5)
+    docile (1.1.5)
+    json (2.0.2)
     rspec (3.5.0)
       rspec-core (~> 3.5.0)
       rspec-expectations (~> 3.5.0)
@@ -23,6 +27,11 @@ GEM
       rspec-support (~> 3.5.0)
     rspec-support (3.5.0)
     rx (0.0.3)
+    simplecov (0.12.0)
+      docile (~> 1.1.0)
+      json (>= 1.8, < 3)
+      simplecov-html (~> 0.10.0)
+    simplecov-html (0.10.0)
 
 PLATFORMS
   ruby
@@ -30,8 +39,10 @@ PLATFORMS
 DEPENDENCIES
   bundler (~> 1.13)
   byebug
+  codeclimate-test-reporter
   rspec (~> 3.0)
   rx-rspec!
+  simplecov
 
 BUNDLED WITH
    1.13.6

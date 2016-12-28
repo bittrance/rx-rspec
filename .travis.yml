@@ -4,3 +4,9 @@ rvm:
   - 2.2
 script:
   - bundle exec rspec -c -fd
+addons:
+    code_climate:
+        repo_token: '${CODECLIMATE_REPO_TOKEN}'
+after_success:
+  - bundle exec codeclimate-test-reporter
+

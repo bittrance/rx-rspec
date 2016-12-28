@@ -1,4 +1,5 @@
 .bundle/
 vendor/
+coverage/
 rx-rspec-*.gem
 .byebug_history

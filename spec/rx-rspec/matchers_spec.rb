@@ -1,3 +1,5 @@
+require 'spec_helper'
+
 require 'rspec/matchers/fail_matchers'
 require 'rx'
 require 'rx-rspec/matchers'

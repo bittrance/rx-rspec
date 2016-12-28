@@ -3,6 +3,7 @@
 [![Gem Version](https://badge.fury.io/rb/rx-rspec.svg)](https://badge.fury.io/rb/rx-rspec)
 [![Build Status](https://travis-ci.org/bittrance/rx-rspec.svg?branch=master)](https://travis-ci.org/bittrance/rx-rspec)
 [![Code Climate](https://codeclimate.com/github/bittrance/rx-rspec/badges/gpa.svg)](https://codeclimate.com/github/bittrance/rx-rspec)
+[![Test Coverage](https://codeclimate.com/github/bittrance/rx-rspec/badges/coverage.svg)](https://codeclimate.com/github/bittrance/rx-rspec/coverage)
 
 ## Rationale
 
