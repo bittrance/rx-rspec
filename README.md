@@ -1,5 +1,9 @@
 # Rspec matchers for RxRuby observables
 
+[![Gem Version](https://badge.fury.io/rb/rx-rspec.svg)](https://badge.fury.io/rb/rx-rspec)
+[![Build Status](https://travis-ci.org/bittrance/rx-rspec.svg?branch=master)](https://travis-ci.org/bittrance/rx-rspec)
+[![Code Climate](https://codeclimate.com/github/bittrance/rx-rspec/badges/gpa.svg)](https://codeclimate.com/github/bittrance/rx-rspec)
+
 ## Rationale
 
 The asynchronous nature of RxRuby makes it hard to write good specs for code that returns observables. The complexity of next/error/completed notifications can also easily trip up a naive spec.
