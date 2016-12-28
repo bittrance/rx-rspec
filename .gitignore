@@ -1,0 +1,4 @@
+.bundle/
+vendor/
+rx-rspec-*.gem
+.byebug_history

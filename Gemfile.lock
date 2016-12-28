@@ -1,0 +1,37 @@
+PATH
+  remote: .
+  specs:
+    rx-rspec (0.1.0)
+      rx
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    byebug (9.0.6)
+    diff-lcs (1.2.5)
+    rspec (3.5.0)
+      rspec-core (~> 3.5.0)
+      rspec-expectations (~> 3.5.0)
+      rspec-mocks (~> 3.5.0)
+    rspec-core (3.5.4)
+      rspec-support (~> 3.5.0)
+    rspec-expectations (3.5.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.5.0)
+    rspec-mocks (3.5.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.5.0)
+    rspec-support (3.5.0)
+    rx (0.0.3)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  bundler (~> 1.13)
+  byebug
+  rspec (~> 3.0)
+  rx-rspec!
+
+BUNDLED WITH
+   1.13.6
