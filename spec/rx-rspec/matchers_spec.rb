@@ -19,6 +19,11 @@ describe '#emit_exactly matcher' do
     it { should emit_exactly(42) }
   end
 
+  context 'given single-emitter async observable' do
+    subject { Rx::Observable.just(42).delay(0) }
+    it { should emit_exactly(42) }
+  end
+
   context 'given multi-emitter observable' do
     subject { Rx::Observable.of(1, 2, 3) }
     it { should emit_exactly(1, 2, 3) }
@@ -26,6 +31,11 @@ describe '#emit_exactly matcher' do
       expect {
         should emit_exactly(1, 2, 3, 4)
       }.to fail_with match(/to match \[1, 2, 3, 4\]/)
+    end
+    it do
+      expect {
+        should emit_exactly(1, 2)
+      }.to fail_with match(/to match \[1, 2\]/)
     end
   end
 

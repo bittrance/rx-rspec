@@ -23,14 +23,7 @@ RSpec::Matchers.define :emit_exactly do |*expected|
     end.join
 
     return false unless errors.empty?
-
-    expected.zip(events).all? do |exp, evt|
-      if exp.respond_to?(:matches?)
-        exp.matches?(evt)
-      else
-        exp == evt
-      end
-    end
+    values_match? expected, events
   end
 
   description do
@@ -48,6 +41,4 @@ RSpec::Matchers.define :emit_exactly do |*expected|
       "expected #{expected} but received error #{errors[0].inspect}"
     end
   end
-
-  diffable
 end
