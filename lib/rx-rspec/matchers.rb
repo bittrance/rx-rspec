@@ -1,3 +1,5 @@
+require 'rspec'
+
 RSpec::Matchers.define :emit_include do |*expected|
   events = []
   errors = []

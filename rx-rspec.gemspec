@@ -1,6 +1,6 @@
 Gem::Specification.new do |spec|
   spec.name        = 'rx-rspec'
-  spec.version     = '0.1.1'
+  spec.version     = '0.1.2'
   spec.summary     = 'rspec testing support for RxRuby'
   spec.description = 'Writing specs for reactive streams is tricky both because of their asynchronous nature and because their next/error/completed semantics. The goal of rx-rspec is to provide powerful matchers that lets you express your expectations in a traditional rspec-like synchronous manner.'
   spec.authors     = ['Anders Qvist']
