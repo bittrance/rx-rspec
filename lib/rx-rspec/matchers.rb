@@ -1,5 +1,8 @@
 require 'rspec'
 
+# TODO:
+# - should have specific timeout message 'x seconds waiting for y'
+
 RSpec::Matchers.define :emit_include do |*expected|
   events = []
   errors = []
@@ -9,15 +12,14 @@ RSpec::Matchers.define :emit_include do |*expected|
     expected = expected.dup
     Thread.new do
       deadline = Time.now + 0.5
-      actual.subscribe_on_error { |err| errors << err }
-      subscription = actual.delay(0).subscribe(
-        lambda do |event|
-          events << event
-          idx = expected.index { |exp| values_match?(exp, event) }
-          expected.delete_at(idx) unless idx.nil?
-          subscription.unsubscribe if expected.empty?
-        end,
-        lambda {}, # Seems we cannot get here
+      actual.take_while do |event|
+        events << event
+        idx = expected.index { |exp| values_match?(exp, event) }
+        expected.delete_at(idx) unless idx.nil?
+        expected.size > 0
+      end.subscribe(
+        lambda { |event| },
+        lambda { |err| errors << err },
         lambda { completed << :complete }
       )
 

@@ -86,6 +86,21 @@ describe '#emit_include' do
     end
   end
 
+  context 'given concatenated observables' do
+    let(:second_observable) { double(:second_observable, :called => nil) }
+    subject do
+      Rx::Observable.concat(
+        Rx::Observable.create { |o| o.on_next(1) ; o.on_completed },
+        Rx::Observable.create { |o| second_observable.called ; o.on_completed }
+      )
+    end
+
+    it 'does not consume more than necessary' do
+      should emit_include(1)
+      expect(second_observable).not_to have_received(:called)
+    end
+  end
+
   context 'given erroring observable' do
     class MyException < Exception ; end
     subject { Rx::Observable.raise_error(MyException.new('BOOM')) }
