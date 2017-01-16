@@ -1,2 +1,3 @@
+require 'rx-rspec/exactly'
 require 'rx-rspec/first'
-require 'rx-rspec/matchers'
+require 'rx-rspec/include'
