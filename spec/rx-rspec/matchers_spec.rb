@@ -1,12 +1,5 @@
 require 'spec_helper'
-
-require 'rspec/matchers/fail_matchers'
-require 'rx'
 require 'rx-rspec/matchers'
-
-RSpec.configure do |config|
-  config.include RSpec::Matchers::FailMatchers
-end
 
 describe '#emit_exactly matcher' do
   context 'given empty observable' do
@@ -40,7 +33,6 @@ describe '#emit_exactly matcher' do
   end
 
   context 'given erroring observable' do
-    class MyException < Exception ; end
     subject { Rx::Observable.raise_error(MyException.new('BOOM')) }
     it do
       expect {
