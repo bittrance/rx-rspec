@@ -28,7 +28,15 @@ require 'rx'
 require 'rx-rspec'
 
 describe 'awesome' do
-  subject { Rx::Observable.just(42) }
-  it { should emit_exactly(42) }
+  subject { Rx::Observable.of(1, 2, 3) }
+  it { should emit_exactly(1, 2, 3) }
 end
 ```
+
+## Matchers
+
+rx-spec include the following matchers:
+
+- **emit_exactly()** metches against all items produced by the observable and requires the observable to be completed.
+- **emit_first()** matches against the first elements of the observable, but does not require it to complete
+- **emit_include()** consumes elements until the expected elements have occurred

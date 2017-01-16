@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rx-rspec (0.1.3)
+    rx-rspec (0.2.0)
       rx
 
 GEM
