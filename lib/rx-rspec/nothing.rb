@@ -1,9 +1,12 @@
 require 'rspec'
+require 'rx-rspec/shared'
 
 # TODO:
 # - should have specific timeout message 'x seconds waiting for y'
 
 RSpec::Matchers.define :emit_nothing do |*expected|
+  include RxRspec::Shared
+
   events = []
   errors = []
   completed = []
@@ -30,7 +33,7 @@ RSpec::Matchers.define :emit_nothing do |*expected|
     if errors.empty?
       "unexpected #{events[0]} emitted"
     else
-      "expected nothing but received error #{errors[0].inspect}"
+      present_error(expected, errors[0])
     end
   end
 end

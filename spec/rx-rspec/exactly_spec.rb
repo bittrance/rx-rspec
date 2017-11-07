@@ -33,11 +33,14 @@ describe '#emit_exactly matcher' do
   end
 
   context 'given erroring observable' do
-    subject { Rx::Observable.raise_error(MyException.new('BOOM')) }
+    let :exception do
+      MyException.new('BOOM').tap {|e| e.set_backtrace(['ze-traceback']) }
+    end
+    subject { Rx::Observable.raise_error(exception) }
     it do
       expect {
         should emit_exactly
-      }.to fail_with match(/but received error.*MyException.*BOOM/)
+      }.to fail_with match(/but received error.*MyException.*BOOM.*ze-traceback/m)
     end
   end
 end
