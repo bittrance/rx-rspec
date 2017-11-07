@@ -13,7 +13,7 @@ The asynchronous nature of RxRuby makes it hard to write good specs for code tha
 
 The goal of rx-rspec is to provide powerful matchers that lets you express your expectations in a traditional rspec-like synchronous manner.
 
-Currently, the ambition of this project is simply to support the use cases that I encounter in my own usage of RxRuby. Your pull requests are wellcome.
+Currently, the ambition of this project is simply to support the use cases that I encounter in my own usage of RxRuby. Your pull requests are welcome.
 
 ## Usage
 
@@ -38,6 +38,6 @@ end
 rx-spec include the following matchers:
 
 - **emit_nothing()** matches an observable that completes without emitting events or erroring.
-- **emit_exactly()** metches against all items produced by the observable and requires the observable to be completed.
+- **emit_exactly()** matches against all items produced by the observable and requires the observable to be completed.
 - **emit_first()** matches against the first elements of the observable, but does not require it to complete
 - **emit_include()** consumes elements until the expected elements have occurred
