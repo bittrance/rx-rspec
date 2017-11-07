@@ -32,6 +32,15 @@ describe '#emit_exactly matcher' do
     end
   end
 
+  context 'given an observable that emits a non-matching hashes' do
+    subject { Rx::Observable.just({v: 'k'}) }
+    it do
+      expect {
+        should emit_exactly({k: 'v'})
+      }.to fail_with match(/-.*:k.*\+.*:v/m)
+    end
+  end
+
   context 'given erroring observable' do
     let :exception do
       MyException.new('BOOM').tap {|e| e.set_backtrace(['ze-traceback']) }

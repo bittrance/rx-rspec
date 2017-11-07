@@ -31,8 +31,11 @@ RSpec::Matchers.define :emit_exactly do |*expected|
     end.join
 
     return false unless errors.empty?
+    @actual = events
     values_match? expected, events
   end
+
+  diffable
 
   failure_message do
     if errors.empty?
