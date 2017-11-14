@@ -33,7 +33,7 @@ RSpec::Matchers.define :emit_first do |*expected|
       raise 'timeout' if Time.now > deadline
     end.join
 
-    expect_clone.empty?
+    values_match? expected, events
   end
 
   failure_message do

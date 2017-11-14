@@ -15,11 +15,21 @@ describe '#emit_first matcher' do
   context 'given single-emitter observable' do
     subject { Rx::Observable.just(42) }
     it { should emit_first(42) }
+    it do
+      expect {
+        should emit_first(43)
+      }.to fail_with match(/at least \[43\]/)
+    end
   end
 
   context 'given single-emitter async observable' do
     subject { Rx::Observable.just(42).delay(0) }
     it { should emit_first(42) }
+    it do
+      expect {
+        should emit_first(43)
+      }.to fail_with match(/at least \[43\]/)
+    end
   end
 
   context 'given multi-emitter observable' do
