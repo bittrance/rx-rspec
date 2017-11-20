@@ -4,7 +4,7 @@ require 'rx-rspec/shared'
 # TODO:
 # - should have specific timeout message 'x seconds waiting for y'
 
-RSpec::Matchers.define :emit_nothing do |*expected|
+RSpec::Matchers.define :emit_nothing do
   include RxRspec::Shared
 
   events = []
