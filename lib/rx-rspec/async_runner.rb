@@ -11,10 +11,10 @@ module RxRspec
     def await_done(&block)
       condition = ConditionVariable.new
       deadline = Time.now + @timeout
-      done_called = false
+      done_args = nil
       error = nil
-      done = Proc.new do
-        done_called = true
+      done = Proc.new do |*args|
+        done_args = args
         condition.signal
       end
       Thread.new do
@@ -27,14 +27,20 @@ module RxRspec
       end.join(@timeout)
 
       gate = Mutex.new
-      until Time.now >= deadline || done_called
+      while Time.now < deadline && done_args.nil?
         gate.synchronize { condition.wait(gate, deadline - Time.now) }
       end
 
       if error
         raise error
-      elsif !done_called
+      elsif done_args.nil?
         RSpec::Expectations.fail_with("Timeout after #{@timeout}")
+      end
+      
+      if done_args.nil? || done_args.size == 0
+        nil
+      else
+        done_args
       end
     end
   end
