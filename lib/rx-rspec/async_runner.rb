@@ -13,11 +13,11 @@ module RxRspec
       deadline = Time.now + @timeout
       done_args = nil
       error = nil
-      done = Proc.new do |*args|
-        done_args = args
-        condition.signal
-      end
       Thread.new do
+        done = Proc.new do |*args|
+          done_args = args unless done_args
+          condition.signal
+        end
         begin
           block.call(done)
         rescue => e
@@ -34,9 +34,9 @@ module RxRspec
       if error
         raise error
       elsif done_args.nil?
-        RSpec::Expectations.fail_with("Timeout after #{@timeout}")
+        RSpec::Expectations.fail_with("Timeout after #{@timeout} seconds")
       end
-      
+
       if done_args.nil? || done_args.size == 0
         nil
       else

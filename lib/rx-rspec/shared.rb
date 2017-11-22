@@ -1,3 +1,6 @@
+require 'rspec'
+require 'rx-rspec/async_runner'
+
 module RxRspec
   module Shared
     DEFAULT_TIMEOUT = 0.5
@@ -6,12 +9,8 @@ module RxRspec
       @timeout || DEFAULT_TIMEOUT
     end
 
-    # chain :within do |seconds|
-    #  @timeout = seconds
-    # end
-    
     def await_done(&block)
-      AsyncRunner.new(@timeout).await_done(&block)
+      AsyncRunner.new(timeout).await_done(&block)
     end
 
     def present_error(expected, error)

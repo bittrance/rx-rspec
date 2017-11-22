@@ -1,46 +1,34 @@
 require 'rspec'
 require 'rx-rspec/shared'
 
-# TODO:
-# - should have specific timeout message 'x seconds waiting for y'
-
 RSpec::Matchers.define :emit_first do |*expected|
   include RxRspec::Shared
-
-  events = []
-  errors = []
-  completed = []
 
   match do |actual|
     raise 'Please supply at least one expectation' if expected.size == 0
     expect_clone = expected.dup
-    Thread.new do
-      deadline = Time.now + 0.5
+    events = []
+    error = await_done do |done|
       actual.take_while do |event|
         events << event
         values_match?(expect_clone.shift, event) && expect_clone.size > 0
       end.subscribe(
         lambda { |event| },
-        lambda { |err| errors << err },
-        lambda { completed << :complete }
+        lambda { |err| done.call(:error, err) },
+        lambda { done.call }
       )
+    end
 
-      until Time.now > deadline
-        break if expect_clone.empty?
-        break unless completed.empty? && errors.empty?
-        sleep(0.05)
-      end
-      raise 'timeout' if Time.now > deadline
-    end.join
-
-    values_match? expected, events
+    @actual = error || [:events, events]
+    error.nil? && values_match?(expected, events)
   end
 
   failure_message do
-    if errors.empty?
-      "expected #{events} to emit at least #{expected}"
+    type, emitted = @actual
+    if type == :events
+      "expected #{emitted} to emit at least #{expected}"
     else
-      present_error(expected, errors[0])
+      present_error(expected, emitted)
     end
   end
 end

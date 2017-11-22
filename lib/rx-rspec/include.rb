@@ -1,20 +1,13 @@
 require 'rspec'
 require 'rx-rspec/shared'
 
-# TODO:
-# - should have specific timeout message 'x seconds waiting for y'
-
 RSpec::Matchers.define :emit_include do |*expected|
   include RxRspec::Shared
 
-  events = []
-  errors = []
-  completed = []
-
   match do |actual|
     expected = expected.dup
-    Thread.new do
-      deadline = Time.now + 0.5
+    events = []
+    error = await_done do |done|
       actual.take_while do |event|
         events << event
         idx = expected.index { |exp| values_match?(exp, event) }
@@ -22,26 +15,21 @@ RSpec::Matchers.define :emit_include do |*expected|
         expected.size > 0
       end.subscribe(
         lambda { |event| },
-        lambda { |err| errors << err },
-        lambda { completed << :complete }
+        lambda { |err| done.call(:error, err) },
+        lambda { done.call }
       )
+    end
 
-      until Time.now > deadline
-        break if expected.empty?
-        break unless completed.empty? && errors.empty?
-        sleep(0.05)
-      end
-      raise 'timeout' if Time.now > deadline
-    end.join
-
-    expected.empty?
+    @actual = error || [:events, events]
+    expected.empty? && error.nil?
   end
 
   failure_message do
-    if errors.empty?
-      "expected #{events} to include #{expected}"
+    type, emitted = @actual
+    if type == :events
+      "expected #{emitted} to include #{expected}"
     else
-      present_error(expected, errors[0])
+      present_error(expected, emitted)
     end
   end
 end
