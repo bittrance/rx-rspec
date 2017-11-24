@@ -1,6 +1,11 @@
 require 'simplecov'
 
-SimpleCov.start
+SimpleCov.start do
+  coverage_dir 'coverage'
+  add_filter do |f|
+    !%r{/lib/rx-rspec}.match(f.filename)
+  end
+end
 
 require 'rspec/matchers/fail_matchers'
 require 'rx'
