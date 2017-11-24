@@ -6,15 +6,20 @@ RSpec::Matchers.define :emit_exactly do |*expected|
 
   match do |actual|
     events = []
-    error = await_done do |done|
-      actual.subscribe(
-        lambda do |event|
-          events << event
-          done.call if events.size > expected.size
-        end,
-        lambda { |err| done.call(:error, err) },
-        lambda { done.call }
-      )
+    begin
+      error = await_done do |done|
+        actual.subscribe(
+          lambda do |event|
+            events << event
+            done.call if events.size > expected.size
+          end,
+          lambda { |err| done.call(:error, err) },
+          lambda { done.call }
+        )
+      end
+    rescue Exception => err
+      @actual = [:error, err]
+      raise err
     end
 
     @actual = error || [:events, events]

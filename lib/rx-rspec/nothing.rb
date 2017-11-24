@@ -5,12 +5,17 @@ RSpec::Matchers.define :emit_nothing do
   include RxRspec::Shared
 
   match do |actual|
-    @actual = await_done do |done|
-      actual.subscribe(
-        lambda { |event| done.call(:events, event) },
-        lambda { |err| done.call(:error, err) },
-        lambda { done.call }
-      )
+    begin
+      @actual = await_done do |done|
+        actual.subscribe(
+          lambda { |event| done.call(:events, event) },
+          lambda { |err| done.call(:error, err) },
+          lambda { done.call }
+        )
+      end
+    rescue Exception => err
+      @actual = [:error, err]
+      raise err
     end
     return @actual.nil?
   end

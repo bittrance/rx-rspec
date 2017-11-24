@@ -8,15 +8,20 @@ RSpec::Matchers.define :emit_first do |*expected|
     raise 'Please supply at least one expectation' if expected.size == 0
     expect_clone = expected.dup
     events = []
-    error = await_done do |done|
-      actual.take_while do |event|
-        events << event
-        values_match?(expect_clone.shift, event) && expect_clone.size > 0
-      end.subscribe(
-        lambda { |event| },
-        lambda { |err| done.call(:error, err) },
-        lambda { done.call }
-      )
+    begin
+      error = await_done do |done|
+        actual.take_while do |event|
+          events << event
+          values_match?(expect_clone.shift, event) && expect_clone.size > 0
+        end.subscribe(
+          lambda { |event| },
+          lambda { |err| done.call(:error, err) },
+          lambda { done.call }
+        )
+      end
+    rescue Exception => err
+      @actual = [:error, err]
+      raise err
     end
 
     @actual = error || [:events, events]

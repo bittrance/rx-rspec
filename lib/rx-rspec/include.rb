@@ -7,17 +7,22 @@ RSpec::Matchers.define :emit_include do |*expected|
   match do |actual|
     expected = expected.dup
     events = []
-    error = await_done do |done|
-      actual.take_while do |event|
-        events << event
-        idx = expected.index { |exp| values_match?(exp, event) }
-        expected.delete_at(idx) unless idx.nil?
-        expected.size > 0
-      end.subscribe(
-        lambda { |event| },
-        lambda { |err| done.call(:error, err) },
-        lambda { done.call }
-      )
+    begin
+      error = await_done do |done|
+        actual.take_while do |event|
+          events << event
+          idx = expected.index { |exp| values_match?(exp, event) }
+          expected.delete_at(idx) unless idx.nil?
+          expected.size > 0
+        end.subscribe(
+          lambda { |event| },
+          lambda { |err| done.call(:error, err) },
+          lambda { done.call }
+        )
+      end
+    rescue Exception => err
+      @actual = [:error, err]
+      raise err
     end
 
     @actual = error || [:events, events]

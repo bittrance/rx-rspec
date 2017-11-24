@@ -61,4 +61,13 @@ describe '#emit_include' do
       }.to fail_with match(/but received error.*MyException.*BOOM/)
     end
   end
+
+  context 'given a non-completing observable' do
+    subject { Rx::Observable.create { |_| } }
+    it do
+      expect {
+        should emit_include(1).within(0.2)
+      }.to fail_with match(/timeout/i)
+    end
+  end
 end
