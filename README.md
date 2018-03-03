@@ -43,7 +43,8 @@ end
 
 rx-spec include the following matchers:
 
-- **emit_nothing()** matches an observable that completes without emitting events or erroring.
-- **emit_exactly()** matches against all items produced by the observable and requires the observable to be completed.
-- **emit_first()** matches against the first elements of the observable, but does not require it to complete
-- **emit_include()** consumes elements until the expected elements have occurred
+- **emit_error(class, message)** matches an observable that errors without emitting any values.
+- **emit_exactly(*events)** matches an observable that emits exactly the given values and requires the observable to be completed.
+- **emit_first(*events)** matches against the first values emitted by the observable, but does not require it to complete.
+- **emit_include(*events)** consumes values until the expected values have been seen.
+- **emit_nothing()** matches an observable that completes without emitting values or erroring.
