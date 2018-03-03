@@ -32,6 +32,12 @@ describe 'awesome' do
   it { should emit_exactly(1, 2, 3) }
 end
 ```
+You can also set a timeout in seconds so your specs don't block forever in case an observable never emits/completes/errors.
+```
+it 'should be fast' do
+  expect(observable).to emit_exactly(42).within(0.1)
+end
+```
 
 ## Matchers
 
