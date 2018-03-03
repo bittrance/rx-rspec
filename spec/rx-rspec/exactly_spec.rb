@@ -10,6 +10,7 @@ describe '#emit_exactly matcher' do
   context 'given single-emitter observable' do
     subject { Rx::Observable.just(42) }
     it { should emit_exactly(42) }
+    it { should emit_exactly(42).within(0.1) }
   end
 
   context 'given single-emitter async observable' do
@@ -50,6 +51,15 @@ describe '#emit_exactly matcher' do
       expect {
         should emit_exactly
       }.to fail_with match(/but received error.*MyException.*BOOM.*ze-traceback/m)
+    end
+  end
+
+  context 'given a non-completing observable' do
+    subject { Rx::Observable.create { |_| } }
+    it do
+      expect {
+        should emit_exactly(1, 2).within(0.2)
+      }.to fail_with match(/timeout/i)
     end
   end
 end

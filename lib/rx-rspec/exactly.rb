@@ -1,47 +1,39 @@
 require 'rspec'
 require 'rx-rspec/shared'
 
-# TODO:
-# - should have specific timeout message 'x seconds waiting for y'
-
 RSpec::Matchers.define :emit_exactly do |*expected|
   include RxRspec::Shared
 
-  events = []
-  errors = []
   match do |actual|
-    Thread.new do
-      spinlock = expected.size
-      actual.subscribe(
-        lambda do |event|
-          events << event
-          spinlock -= 1
-        end,
-        lambda do |err|
-          errors << err
-          spinlock = 0
-        end,
-        lambda { spinlock = 0 }
-      )
-      for n in 1..10
-        break if spinlock == 0
-        sleep(0.05)
+    events = []
+    begin
+      error = await_done do |done|
+        actual.subscribe(
+          lambda do |event|
+            events << event
+            done.call if events.size > expected.size
+          end,
+          lambda { |err| done.call(:error, err) },
+          lambda { done.call }
+        )
       end
-      raise 'timeout' if spinlock > 0
-    end.join
+    rescue Exception => err
+      @actual = [:error, err]
+      raise err
+    end
 
-    return false unless errors.empty?
-    @actual = events
-    values_match? expected, events
+    @actual = error || [:events, events]
+    error.nil? && values_match?(expected, events)
   end
 
   diffable
 
   failure_message do
-    if errors.empty?
-      "expected #{events} to match #{expected}"
+    type, emitted = @actual
+    if type == :events
+      "expected #{emitted} to match #{expected}"
     else
-      present_error(expected, errors[0])
+      present_error(expected, emitted)
     end
   end
 end

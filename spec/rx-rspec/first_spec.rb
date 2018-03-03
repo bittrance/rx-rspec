@@ -15,6 +15,7 @@ describe '#emit_first matcher' do
   context 'given single-emitter observable' do
     subject { Rx::Observable.just(42) }
     it { should emit_first(42) }
+    it { should emit_first(42).within(0.1) }
     it do
       expect {
         should emit_first(43)
@@ -49,6 +50,15 @@ describe '#emit_first matcher' do
       expect {
         should emit_first(42)
       }.to fail_with match(/but received error.*MyException.*BOOM/)
+    end
+  end
+
+  context 'given a non-completing observable' do
+    subject { Rx::Observable.create { |_| } }
+    it do
+      expect {
+        should emit_first(1, 2).within(0.2)
+      }.to fail_with match(/timeout/i)
     end
   end
 end

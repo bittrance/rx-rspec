@@ -5,6 +5,7 @@ describe '#emit_nothing matcher' do
   context 'given empty observable' do
     subject { Rx::Observable.empty }
     it { should emit_nothing }
+    it { should emit_nothing.within(0.1) }
   end
 
   context 'given single-emitter observable' do
@@ -22,6 +23,15 @@ describe '#emit_nothing matcher' do
       expect {
         should emit_nothing
       }.to fail_with match(/but received error.*MyException.*BOOM/)
+    end
+  end
+
+  context 'given a non-completing observable' do
+    subject { Rx::Observable.create { |_| } }
+    it do
+      expect {
+        should emit_nothing.within(0.2)
+      }.to fail_with match(/timeout/i)
     end
   end
 end
