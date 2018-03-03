@@ -10,6 +10,7 @@ describe '#emit_exactly matcher' do
   context 'given single-emitter observable' do
     subject { Rx::Observable.just(42) }
     it { should emit_exactly(42) }
+    it { should emit_exactly(42).within(0.1) }
   end
 
   context 'given single-emitter async observable' do

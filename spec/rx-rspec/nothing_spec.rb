@@ -5,6 +5,7 @@ describe '#emit_nothing matcher' do
   context 'given empty observable' do
     subject { Rx::Observable.empty }
     it { should emit_nothing }
+    it { should emit_nothing.within(0.1) }
   end
 
   context 'given single-emitter observable' do

@@ -15,6 +15,7 @@ describe '#emit_first matcher' do
   context 'given single-emitter observable' do
     subject { Rx::Observable.just(42) }
     it { should emit_first(42) }
+    it { should emit_first(42).within(0.1) }
     it do
       expect {
         should emit_first(43)

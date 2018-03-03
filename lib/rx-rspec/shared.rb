@@ -9,6 +9,14 @@ module RxRspec
       mod.chain :within do |seconds|
         @timeout = seconds
       end
+
+      mod.description do
+        if @timeout
+          super() + " within #{@timeout} seconds"
+        else
+          super()
+        end
+      end
     end
 
     def timeout

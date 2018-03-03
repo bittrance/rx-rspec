@@ -14,6 +14,7 @@ describe '#emit_include' do
   context 'given single-emitter observable' do
     subject { Rx::Observable.just(42) }
     it { should emit_include(42) }
+    it { should emit_include(42).within(0.1) }
   end
 
   context 'given single-emitter observable' do
