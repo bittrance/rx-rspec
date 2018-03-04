@@ -1,3 +1,4 @@
+require 'rx-rspec/complete'
 require 'rx-rspec/error'
 require 'rx-rspec/exactly'
 require 'rx-rspec/first'
