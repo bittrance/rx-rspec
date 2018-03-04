@@ -29,7 +29,6 @@ describe RxRspec::AsyncRunner do
         runner.await_done {|_| }
       end.to fail_with(/timeout/i)
       expect(Time.now - start).to be >= 0.2
-      expect(Time.now - start).to be < 0.3
     end
 
     it 'propagates exceptions from within the block' do
